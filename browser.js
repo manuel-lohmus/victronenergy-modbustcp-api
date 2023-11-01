@@ -1,0 +1,1 @@
+throw new Error("'victronenergy-modbustcp-api' does not work in the browser.");

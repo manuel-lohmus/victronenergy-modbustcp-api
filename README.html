@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>victronenergy-modbustcp-api: helps to read and write Victron Energy GX Modbus-TCP Registers</title>
+</head>
+<body>
+
+    <h1 id="victronenergy-modbustcp-api-helps-to-read-and-write-victron-energy-gx-modbus-tcp-registers">victronenergy-modbustcp-api: helps to read and write Victron Energy GX Modbus-TCP Registers</h1>
+<p><a href="https://www.npmjs.com/package/victronenergy-modbustcp-api"><img src="https://badgen.net/npm/v/victronenergy-modbustcp-api" alt="npm-version" /></a>
+<a href="https://www.npmjs.com/package/victronenergy-modbustcp-api"><img src="https://badgen.net/npm/dw/victronenergy-modbustcp-api" alt="npm-week-downloads" /></a></p>
+<p>The library helps to read and write Victron Energy GX Modbus-TCP Registers <br />
+Please read <a href="https://www.victronenergy.com/live/ccgx:modbustcp_faq">Documentation » ccgx » GX Modbus-TCP Manual</a> before starting. <br />
+The library is designed for the package <a href="https://www.npmjs.com/package/conextra">'conextra'</a>.</p>
+<h2 id="table-of-contents">Table of contents</h2>
+<ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage-example-console-victronenergy-modbustcp-api">Usage example: console-victronenergy-modbustcp-api</a></li>
+<li><a href="#usage-example-simple-modbus-api">Usage example: simple-modbus-api</a></li>
+<li><a href="#victronenergy-modbustcp-api-reference">'victronenergy-modbustcp-api' Reference</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p><code>npm install victronenergy-modbustcp-api</code></p>
+<h2 id="usage-example-console-victronenergy-modbustcp-api">Usage example: <a href="./examples/console-victronenergy-modbustcp-api/">console-victronenergy-modbustcp-api</a></h2>
+<pre><code class="language-js">var modbus_api = require(&quot;victronenergy-modbustcp-api&quot;);
+var util = require('util');
+var modbusPort = 502;
+var modbusHostname = &quot;192.168.8.106&quot;;
+
+// request: `/$modbus/{UnitID}?${RegisterAddress}=${setValue}`
+var requests = [
+
+    // /Ac/Consumption/L1+L2+L3/Power
+    `/$modbus/100?817+818+819`
+];
+
+requests.forEach(function (request) {
+
+    requestModbusTCP(
+        modbusHostname,
+        modbusPort,
+        request.substring(9),
+        function (err, result) {
+
+            if (err) { console.error(err); }
+            console.log(util.inspect(result, { showHidden: false, depth: null, colors: true }));
+        }
+    );
+});
+</code></pre>
+<h4 id="result">Result:</h4>
+<p><img src="console-victronenergy-modbustcp-api.png" alt="result" /></p>
+<h2 id="usage-example-simple-modbus-api">Usage example: <a href="./examples/simple-modbus-api/">simple-modbus-api</a></h2>
+<pre><code class="language-js">'use strict';
+
+var requestModbusTCP = require(&quot;victronenergy-modbustcp-api&quot;);
+var server = require(&quot;tiny-https-server&quot;);
+var options = require(&quot;config-sets&quot;);
+options.init({
+    modbusPort: 502,
+    modbusHostname: &quot;192.168.8.106&quot;
+});
+
+server.on(&quot;request&quot;, function (req, res, next) {
+
+    if (req.url.startsWith(&quot;/$modbus/&quot;)) {
+
+        requestModbusTCP(
+            options.modbusHostname,
+            options.modbusPort,
+            req.url.substring(9),
+            function (err, result) {
+
+                res.writeHead(200, { &quot;Content-Type&quot;: &quot;text/json&quot; });
+                res.write(JSON.stringify(err || result));
+                res.end();
+            }
+        );
+    }
+    else
+        next();
+});
+
+
+var port = options.tiny_https_server.port;
+if (port === 80 || port === 443) { port = &quot;&quot;; }
+else { port = &quot;:&quot; + port; }
+
+/**
+ * `http://localhost/$modbus/${UnitID}?${Address}=${setValue}`
+ * example http://localhost/$modbus/228?33=4
+ * see info: https://www.victronenergy.com/live/ccgx:modbustcp_faq
+ */
+var urls = [
+
+    // /Ac/Consumption/L1+L2+L3/Power
+    `http://localhost${port}/$modbus/100?817+818+819`,
+
+    //// /Ac/Grid/L1+L2+L3/Power
+    //`http://localhost${port}/$modbus/100?820+821+822`,
+
+    //// /Dc/Battery/Power
+    //`http://localhost${port}/$modbus/100?842`,
+
+    //// /Dc/Battery/Temperature
+    //`http://localhost${port}/$modbus/228?61`,
+
+    //// /Dc/Battery/Soc
+    //`http://localhost${port}/$modbus/100?843`,
+
+    //// /Hub4/Sustain
+    //`http://localhost${port}/$modbus/228?73`,
+
+    //// //Serial
+    //`http://localhost${port}/$modbus/100?800`,
+
+    //// //Serial
+    //`http://localhost${port}/$modbus/30?2609`,
+
+    //// /Settings/Cgwacs/AcPowerSetPoint
+    //`http://localhost${port}/$modbus/100?2700`,
+
+    //// /Settings/Cgwacs/MaxChargePercentage
+    //`http://localhost${port}/$modbus/100?2701`,
+
+    //// /Settings/Cgwacs/MaxDischargePercentage
+    //`http://localhost${port}/$modbus/100?2702`,
+
+    //// /Settings/Cgwacs/AcPowerSetPoint
+    //`http://localhost${port}/$modbus/100?2703`,
+
+    //// /Settings/Cgwacs/Hub4Mode
+    //`http://localhost${port}/$modbus/100?2902`,
+
+    //// /State
+    //`http://localhost${port}/$modbus/228?31`,
+
+    //// /Switch Position
+    //`http://localhost${port}/$modbus/228?33=4`,
+
+    //// /Ac/L1|L2|L3/Energy/Forward|Reverse
+    //`http://localhost${port}/$modbus/30?2603+2604+2605+2606+2607+2608`,
+
+    //// /Ac/L1|L2|L3/Voltage|Current
+    //`http://localhost${port}/$modbus/30?2616+2617+2618+2619+2620+2621`,
+
+    //// /gps
+    //`http://localhost${port}/$modbus/100?2800+2802+2804+2805+2806+2807+2808`,
+];
+
+// Opens the URLs in the browser.
+while (urls.length) {
+    require(&quot;browse-url&quot;)(urls.shift());
+}
+</code></pre>
+<h4 id="result-1">Result:</h4>
+<p><img src="simple-modbus-api.png" alt="result" /></p>
+<h2 id="victronenergy-modbustcp-api-reference">'victronenergy-modbustcp-api' Reference</h2>
+<pre><code class="language-js">
+/**
+ * 
+ * Request Modbus TCP 
+ * 
+ * request: `{UnitID}?${RegisterAddress}=${setValue}`
+ * example: requestModbusTCP(&quot;192.168.8.106&quot;, 502, &quot;100?817+818+819&quot;, (err, result) =&gt; { ... })
+ * see info: https://www.victronenergy.com/live/ccgx:modbustcp_faq
+ * 
+ * @param {string} host
+ * @param {number} port example: 502
+ * @param {string} request `{UnitID}?${RegisterAddress}=${setValue}`
+ *  example: &quot;100?817+818+819&quot;
+ * @param {(err:any, result:object)=&gt;void} callback
+ */
+function requestModbusTCP(host, port, request, callback) 
+</code></pre>
+<h2 id="license">License</h2>
+<p>The MIT License <a href="LICENSE">MIT</a></p>
+<pre><code class="language-txt">The MIT License (MIT)
+
+Copyright (c) 2023 Manuel Lõhmus &lt;manuel@hauss.ee&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+</code></pre>
+
+
+</body>
+</html>

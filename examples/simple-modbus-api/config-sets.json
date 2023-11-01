@@ -1,0 +1,51 @@
+{
+  "production": {
+    "isDebug": false,
+    "tiny_https_server": {
+      "domain": "laptop-l6kf75di",
+      "port": 80,
+      "logDir": "./log/tiny-https-server",
+      "document_root": "./public/www",
+      "directory_index": "index.html",
+      "pathToError_404": "./error_404.html",
+      "pathToPrivkey": "",
+      "pathToCert": "",
+      "subdomains": {},
+      "cacheControl": {
+        "fileTypes": {
+          "webp": "max-age=2592000",
+          "bmp": "max-age=2592000",
+          "jpeg": "max-age=2592000",
+          "jpg": "max-age=2592000",
+          "png": "max-age=2592000",
+          "svg": "max-age=2592000",
+          "pdf": "max-age=2592000",
+          "woff2": "max-age=2592000",
+          "woff": "max-age=2592000",
+          "image/svg+xml": "max-age=2592000",
+          "html": "max-age=86400",
+          "css": "max-age=86400",
+          "js": "max-age=86400"
+        }
+      },
+      "setHeaders": {
+        "default": {}
+      },
+      "service_worker_version": "0.0.0",
+      "content_delivery_network_url": " ",
+      "content_delivery_network_root": " ",
+      "precache_urls": null,
+      "blacklist": {},
+      "blacklist_blocking_from": 100
+    },
+    "modbusPort": 502,
+    "modbusHostname": "192.168.8.106",
+    "browse_url": {
+      "launch_url": "http://localhost:1337/",
+      "enabled": true
+    }
+  },
+  "development": {
+    "isDebug": true
+  }
+}

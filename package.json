@@ -1,0 +1,32 @@
+{
+  "name": "victronenergy-modbustcp-api",
+  "version": "1.0.0",
+  "description": "victronenergy-modbustcp-api",
+  "keywords": [
+    "victronenergy",
+    "modbustcp",
+    "modbus"
+  ],
+  "author": "Manuel Lõhmus <manuel@hauss.ee>",
+  "license": "MIT",
+  "main": "index.js",
+  "browser": "browser.js",
+  "files": [
+    "browser.js",
+    "CCGX-Modbus-TCP-register-list-3.00.json",
+    "index.js",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "README.html"
+  ],
+  "homepage": "https://github.com/manuel-lohmus/victronenergy-modbustcp-api#readme",
+  "bugs": "https://github.com/manuel-lohmus/victronenergy-modbustcp-api/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manuel-lohmus/victronenergy-modbustcp-api.git"
+  },
+  "dependencies": {
+    "modbus-stream": "^0.46.0"
+  }
+}

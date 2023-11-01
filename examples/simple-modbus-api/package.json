@@ -1,0 +1,15 @@
+{
+  "name": "simple-modbus-api",
+  "version": "0.0.0",
+  "description": "simple-modbus-api",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  },
+  "eslintConfig": {},
+  "dependencies": {
+    "browse-url": "^1.1.5",
+    "config-sets": "^2.6.3",
+    "tiny-https-server": "^1.7.6"
+  }
+}
