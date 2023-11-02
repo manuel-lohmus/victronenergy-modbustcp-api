@@ -19,7 +19,7 @@ The library is designed for the package ['conextra'](https://www.npmjs.com/packa
 
 `npm install victronenergy-modbustcp-api`
 
-## Usage example: [console-victronenergy-modbustcp-api](./examples/console-victronenergy-modbustcp-api/)
+## Usage example: [console-victronenergy-modbustcp-api](https://github.com/manuel-lohmus/victronenergy-modbustcp-api/examples/console-victronenergy-modbustcp-api/)
 
 ```js
 var modbus_api = require("victronenergy-modbustcp-api");
@@ -51,7 +51,7 @@ requests.forEach(function (request) {
 #### Result:
 ![result](console-victronenergy-modbustcp-api.png) 
 
-## Usage example: [simple-modbus-api](./examples/simple-modbus-api/)
+## Usage example: [simple-modbus-api](https://github.com/manuel-lohmus/victronenergy-modbustcp-api/examples/simple-modbus-api/)
 
 ```js
 'use strict';
